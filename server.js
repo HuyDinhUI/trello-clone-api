@@ -7,6 +7,8 @@ import {APIs_v1} from './src/routes/v1/index.js'
 import { corsOptions } from "./src/config/corsOptions.js";
 import passport from "passport";
 import "./src/config/auth/passport.js"
+import fs from "fs";
+import https from "https";
 
 const app = express();
 
@@ -34,8 +36,14 @@ const START_SERVER = () => {
     res.send("Server is running");
   });
   const PORT = process.env.PORT;
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+
+  const httpsOptions = {
+    key: fs.readFileSync("./localhost+1-key.pem"),
+    cert: fs.readFileSync("./localhost+1.pem"),
+  };
+
+  https.createServer(httpsOptions, app).listen(PORT, () => {
+    console.log(`✅ HTTPS Server is running at https://localhost:${PORT}`);
   });
 };
 

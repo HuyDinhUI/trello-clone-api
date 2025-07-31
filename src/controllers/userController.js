@@ -43,7 +43,7 @@ const login = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ message: "Phone is not existing" });
+      return res.status(400).json({ message: "Email is existing" });
     }
 
     const isMatchPassword = await bcrybt.compare(password, user.password);
@@ -76,7 +76,7 @@ const login = async (req, res) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "Strict",
+      sameSite: "none",
       maxAge: ms("14 days"),
     });
 
@@ -85,7 +85,7 @@ const login = async (req, res) => {
     res.cookie("refresh", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "Strict",
+      sameSite: "none",
       maxAge: ms("14 days"),
     });
 
