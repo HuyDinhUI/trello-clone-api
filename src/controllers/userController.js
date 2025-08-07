@@ -76,7 +76,7 @@ const login = async (req, res) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "None",
       maxAge: ms("14 days"),
     });
 
@@ -85,7 +85,7 @@ const login = async (req, res) => {
     res.cookie("refresh", refreshToken, {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "None",
       maxAge: ms("14 days"),
     });
 
@@ -104,13 +104,13 @@ const logout = async (req, res) => {
   try {
     res.clearCookie("accessToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      secure: true,
+      sameSite: "None",
     });
     res.clearCookie("refresh", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      secure:true,
+      sameSite: "None",
     });
     res.status(StatusCodes.OK).json({ message: "Log out success" });
   } catch (error) {
