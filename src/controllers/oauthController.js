@@ -15,7 +15,7 @@ export const OauthCallback = (req, res) => {
   res.cookie("accessToken", token, {
     httpOnly: true,
     secure: true,
-    sameSite: "Strict",
+    sameSite: "None",
     maxAge: ms("14 days"),
   });
 

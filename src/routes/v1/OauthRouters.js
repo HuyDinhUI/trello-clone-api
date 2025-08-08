@@ -11,7 +11,7 @@ router.get('/google',
 
 // Google redirect về
 router.get('/google/callback',
-  passport.authenticate('google', { failureRedirect: '/v1/auth/google',session:false }),
+  passport.authenticate('google', { failureRedirect: '/',session:false }),
   OauthCallback
 );
 
