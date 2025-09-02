@@ -126,7 +126,7 @@ const refreshToken = async (req, res) => {
   }
 };
 
-export const userController = {
+export const authController = {
   signup,
   login,
   logout,
