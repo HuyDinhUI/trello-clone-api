@@ -5,19 +5,32 @@ import { Column } from "../modules/columns.js"
 
 
 const createNew = async (data) => {
-    try{
+    try {
 
         const model = new Column(data)
         const column = await model.save()
-        await Board.findByIdAndUpdate(data.boardId,{$push: {columns: column._id}})
+        await Board.findByIdAndUpdate(
+            data.boardId,
+            {
+                $push:
+                {
+                    columns: column._id,
+                    columnsOrder: column._id
+                }
+            },
+            { new: true }
+        ).populate("columnsOrder")
+
         const dataRes = {
             column
         }
 
-    return dataRes
+        return dataRes
 
-    } catch (error) { throw error}
+    } catch (error) { throw error }
 }
+
+
 
 export const columnServices = {
     createNew

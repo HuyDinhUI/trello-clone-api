@@ -11,4 +11,6 @@ Router.get('/:id', authMiddleware.isAuthozied,boardControllers.getOneBoard)
 
 Router.post('/',authMiddleware.isAuthozied,boardControllers.createNew)
 
+Router.put('/reorderColumn/:id', authMiddleware.isAuthozied, boardControllers.updateReorder)
+
 export const boardsRouter = Router

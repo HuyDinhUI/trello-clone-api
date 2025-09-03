@@ -1,23 +1,23 @@
-import {StatusCodes} from 'http-status-codes'
+import { StatusCodes } from 'http-status-codes'
 import { boardServices } from '../services/boardsService.js'
 
 
 const getAllBoard = async (req, res, next) => {
-    try{
+    try {
         const UserId = req.jwtDecoded.id
         const boards = await boardServices.getAllBoardByUser(UserId)
 
         res.status(StatusCodes.OK).json(boards)
     }
-    catch (error){
+    catch (error) {
         next(error)
     }
 }
 
 const getOneBoard = async (req, res, next) => {
-    try{
+    try {
         const UserId = req.jwtDecoded.id
-        const BoardId =req.params.id
+        const BoardId = req.params.id
         const board = await boardServices.getOneBoard(UserId, BoardId)
 
         res.status(StatusCodes.OK).json(board)
@@ -28,15 +28,30 @@ const getOneBoard = async (req, res, next) => {
 }
 
 const createNew = async (req, res, next) => {
-    try{
+    try {
 
-        const UserId =  req.jwtDecoded.id
+        const UserId = req.jwtDecoded.id
 
-        const createBoard = await boardServices.createNew(req.body,UserId)
+        const createBoard = await boardServices.createNew(req.body, UserId)
 
         res.status(StatusCodes.CREATED).json(createBoard)
     }
-    catch (error){
+    catch (error) {
+        next(error)
+    }
+}
+
+const updateReorder = async (req, res, next) => {
+    try {
+        const UserId = req.jwtDecoded.id
+        const BoardId = req.params.id
+        const {columnsOrder} = req.body
+
+        const newBoard = await boardServices.updateReorder(BoardId, UserId, columnsOrder)
+
+        res.status(StatusCodes.OK).json(newBoard)
+    }
+    catch (error) {
         next(error)
     }
 }
@@ -44,5 +59,6 @@ const createNew = async (req, res, next) => {
 export const boardControllers = {
     createNew,
     getAllBoard,
-    getOneBoard
+    getOneBoard,
+    updateReorder
 }

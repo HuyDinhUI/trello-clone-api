@@ -13,6 +13,18 @@ const createNew = async (req, res, next) => {
     }
 }
 
+const updateOrderAndPosition = async (req, res, next) => {
+    try{
+        const {boardId, columns} = req.body
+
+        await cardServices.updateOrderAndPosition(boardId, columns)
+    }
+    catch (error){
+        next(error)
+    }
+}
+
 export const cardControllers = {
-    createNew
+    createNew,
+    updateOrderAndPosition
 }

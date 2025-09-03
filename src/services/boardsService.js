@@ -36,7 +36,7 @@ const getOneBoard = async (UserId, BoardId) => {
             .populate("ownerIds", "username email")
             .populate("memberIds", "username email")
             .populate({
-                path: "columns",
+                path: "columnsOrder",
                 populate: { path: "cards" }
             })
     } catch (error) { throw error }
@@ -45,10 +45,7 @@ const getOneBoard = async (UserId, BoardId) => {
 
 const createNew = async (reqData, UserId) => {
     try {
-        // const newBoard = {
-        //     ...data,
-        //     slug: slugtify(data.title)
-        // }
+
 
         const data = {
             ...reqData,
@@ -67,8 +64,29 @@ const createNew = async (reqData, UserId) => {
     } catch (error) { throw error }
 }
 
+const updateReorder = async (BoardId, UserId, columnsOrder) => {
+    try {
+        const newBoard = await Board.findOneAndUpdate(
+            {
+                _id: BoardId,
+                $or: [
+                    { ownerIds: UserId },
+                    { memberIds: UserId },
+                    { visibility: "public" }
+                ]
+            },
+            { $set: { columnsOrder } },
+            { new: true }
+        )
+
+        return newBoard
+    }
+    catch (error) { throw error }
+}
+
 export const boardServices = {
     createNew,
     getAllBoardByUser,
-    getOneBoard
+    getOneBoard,
+    updateReorder
 }

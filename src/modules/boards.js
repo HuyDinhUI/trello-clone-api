@@ -7,6 +7,7 @@ const boardsSchema = new mongoose.Schema({
     ownerIds: [{ type: Schema.Types.ObjectId, ref: 'Users' }],
     memberIds: [{ type: Schema.Types.ObjectId, ref: 'Users' }],
     columns: [{ type: Schema.Types.ObjectId, ref: 'Columns' }],
+    columnsOrder: [{ type: Schema.Types.ObjectId, ref: 'Columns' }],
     _destroy: { type: Boolean, default: false }
 }, { timestamps: true })
 
