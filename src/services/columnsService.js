@@ -30,8 +30,20 @@ const createNew = async (data) => {
     } catch (error) { throw error }
 }
 
+const updateLabel = async (title, boardId) => {
+    try {
+        const update = await Column.findByIdAndUpdate(
+            boardId,
+            { $set: { title } },
+            { new: true }
+        )
 
+        return update
+    }
+    catch (error) { throw error }
+}
 
 export const columnServices = {
-    createNew
+    createNew,
+    updateLabel
 }

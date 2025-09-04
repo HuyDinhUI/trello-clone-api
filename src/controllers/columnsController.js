@@ -13,6 +13,18 @@ const createNew = async (req, res, next) => {
     }
 }
 
+const updateLabel = async (req, res, next) => {
+    try{
+        const update = await columnServices.updateLabel(req.body.title, req.body.boardId)
+
+        res.status(StatusCodes.OK).json(update)
+    }
+    catch (error){
+        next(error)
+    }
+}
+
 export const columnControllers = {
-    createNew
+    createNew,
+    updateLabel
 }
