@@ -38,7 +38,13 @@ const signup = async (req, res) => {
 };
 
 const login = async (req, res) => {
+
+  if (req.login_anomaly.level === 'critical') {
+    return res.status(StatusCodes.TOO_MANY_REQUESTS).json({message: "Detected unauthorized login"})
+  }
+
   const { username, email, password, phone } = req.body;
+
   try {
     const user = await User.findOne({ email });
 
