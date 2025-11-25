@@ -39,7 +39,7 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
 
-  if (req.login_anomaly.level === 'critical') {
+  if (req.alert === 'Rất bất thường') {
     return res.status(StatusCodes.TOO_MANY_REQUESTS).json({message: "Detected unauthorized login"})
   }
 
@@ -68,7 +68,7 @@ const login = async (req, res) => {
     const accessToken = await JwtProvider.generateToken(
       userInfo,
       ACCESS_TOKEN_SECRET_SIGNATURE,
-      "1h"
+      "14 days"
     );
 
     const refreshToken = await JwtProvider.generateToken(

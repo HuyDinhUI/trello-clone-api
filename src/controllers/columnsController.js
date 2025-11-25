@@ -9,7 +9,7 @@ const createNew = async (req, res, next) => {
         res.status(StatusCodes.CREATED).json(createColumn)
     }
     catch (error){
-        next(error)
+        res.status(500).json({message: error.message})
     }
 }
 
@@ -20,7 +20,7 @@ const updateLabel = async (req, res, next) => {
         res.status(StatusCodes.OK).json(update)
     }
     catch (error){
-        next(error)
+        res.status(500).json({message: error.message})
     }
 }
 

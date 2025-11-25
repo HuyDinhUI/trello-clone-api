@@ -7,7 +7,7 @@ const Router = express.Router();
 Router.route("/signup").post(userValidation.SignUp,authController.signup)
 
 // API login
-Router.route("/login").post(userValidation.Login,LoginMonitor.createLoginMonitor({mlUrl:'https://fe9f16457848.ngrok-free.app/'}),LoginMonitor.saveLoginLog,authController.login);
+Router.route("/login").post(userValidation.Login,LoginMonitor.createLoginMonitor({mlUrl:'http://localhost:5325/'}),authController.login);
 
 // API logout
 Router.route("/logout").delete(authController.logout);
