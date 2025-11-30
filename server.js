@@ -9,6 +9,7 @@ import passport from "passport";
 import "./src/config/auth/passport.js"
 import fs from "fs";
 import https from "https";
+import http from "http"
 
 const app = express();
 
@@ -37,13 +38,10 @@ const START_SERVER = () => {
   });
   const PORT = process.env.PORT;
 
-  const httpsOptions = {
-    key: fs.readFileSync("./localhost+1-key.pem"),
-    cert: fs.readFileSync("./localhost+1.pem"),
-  };
+  const server = http.createServer(app)
 
-  https.createServer(httpsOptions, app).listen(PORT, () => {
-    console.log(`✅ HTTPS Server is running at https://localhost:${PORT}`);
+  server.listen(PORT, () => {
+    console.log(`✅ HTTPS Server is running at http://localhost:${PORT}`);
   });
 };
 

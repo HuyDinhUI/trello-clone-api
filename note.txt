@@ -1,0 +1,3 @@
+- Workspace: tất cả thành viên trong workspace có thể chỉnh sửa board
+- Private: chỉ có thành viên trong board mới có thể nhìn thấy và chỉnh sửa
+- Public: tất cả người dùng đều có thể thấy và chỉnh 

@@ -1,12 +1,15 @@
 import express from "express"
-
 import {columnControllers} from '../../controllers/columnsController.js'
 import { authMiddleware } from "../../middlewares/authMiddleware.js"
 
 const Router = express.Router()
 
-Router.post('/',authMiddleware.isAuthozied,columnControllers.createNew)
+Router.use(authMiddleware.isAuthozied)
 
-Router.put('/',authMiddleware.isAuthozied,columnControllers.updateLabel)
+Router.post('/',columnControllers.createNew)
+
+Router.put('/',columnControllers.updateLabel)
+
+Router.delete('/:id',columnControllers.deleteColumn)
 
 export const columnsRouter = Router

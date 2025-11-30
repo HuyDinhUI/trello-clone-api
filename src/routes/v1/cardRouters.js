@@ -15,4 +15,6 @@ Router.put('/updateOrderAndPosition', cardControllers.updateOrderAndPosition)
 
 Router.put('/update/content', cardControllers.upadateContent)
 
+Router.delete('/delete/:id', cardControllers.deleteCard)
+
 export const cardsRouter = Router

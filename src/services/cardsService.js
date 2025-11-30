@@ -35,6 +35,7 @@ const upadateContent = async (data, UserId) => {
     await Card.findOneAndUpdate(
       {
         _id: _id,
+        // test dùng or (khi có joined đổi lại and)
         $or: [
           {
             joined: UserId,
@@ -55,16 +56,12 @@ const updateOrderAndPosition = async (BoardId, Columns) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
-  console.log("Column:", Columns);
-
   const isCardPlaceholder = Columns.find((c) =>
     c.cards.find((card) => card.FE_placeholderCard)
   );
   if (isCardPlaceholder) {
     isCardPlaceholder.cards = [];
   }
-
-  console.log("Column:", Columns);
 
   try {
     for (const col of Columns) {
@@ -91,9 +88,21 @@ const updateOrderAndPosition = async (BoardId, Columns) => {
   }
 };
 
+const deleteCard = async (CardId, UserId) => {
+  try {
+    await Card.deleteOne({
+      _id: CardId,
+      // thêm điều kiện joined
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const cardServices = {
   getCard,
   createNew,
   updateOrderAndPosition,
   upadateContent,
+  deleteCard,
 };
