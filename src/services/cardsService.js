@@ -19,11 +19,8 @@ const createNew = async (data) => {
     await Column.findByIdAndUpdate(data.columnId, {
       $push: { cards: card._id },
     });
-    const dataRes = {
-      card,
-    };
 
-    return dataRes;
+    return card;
   } catch (error) {
     throw error;
   }

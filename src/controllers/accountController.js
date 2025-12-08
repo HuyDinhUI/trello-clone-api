@@ -8,7 +8,7 @@ const getUserInfo = async (req, res) => {
     const user = await User.findById(userId).select("-password");
 
     if (!user) {
-      res.status(404).json({ message: "This user is not existing" });
+      return res.status(404).json({ message: "This user is not existing" });
     }
 
     res.status(200).json(user);

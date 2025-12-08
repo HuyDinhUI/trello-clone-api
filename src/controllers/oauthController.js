@@ -20,7 +20,7 @@ export const OauthCallback = (req, res) => {
   });
 
   
-  const redirectUrl = `${process.env.FRONTEND_URL}`;
+  const redirectUrl = `${process.env.FRONTEND_URL}/dashboard/boards`;
   res.redirect(redirectUrl);
 };
 

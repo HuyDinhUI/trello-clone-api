@@ -5,12 +5,18 @@ import { authMiddleware } from "../../middlewares/authMiddleware.js"
 
 const Router = express.Router()
 
-Router.get('/',authMiddleware.isAuthozied,boardControllers.getAllBoard)
+Router.use(authMiddleware.isAuthozied)
 
-Router.get('/:id', authMiddleware.isAuthozied,boardControllers.getOneBoard)
+Router.get('/',boardControllers.getAllBoard)
 
-Router.post('/',authMiddleware.isAuthozied,boardControllers.createNew)
+Router.get('/search', boardControllers.search)
 
-Router.put('/reorderColumn/:id', authMiddleware.isAuthozied, boardControllers.updateReorder)
+Router.get('/:id', boardControllers.getOneBoard)
+
+Router.post('/',boardControllers.createNew)
+
+Router.put('/reorderColumn/:id',boardControllers.updateReorder)
+
+Router.put('/starred', boardControllers.starred)
 
 export const boardsRouter = Router

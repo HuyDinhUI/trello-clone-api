@@ -16,11 +16,9 @@ const createNew = async (data) => {
       { new: true }
     ).populate("columnsOrder");
 
-    const dataRes = {
-      column,
-    };
+    
 
-    return dataRes;
+    return column;
   } catch (error) {
     throw error;
   }
