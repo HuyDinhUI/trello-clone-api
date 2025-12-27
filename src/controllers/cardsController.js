@@ -12,23 +12,25 @@ const getCard = async (req, res) => {
   }
 };
 
-const createNew = async (req, res, next) => {
+const createNew = async (req, res) => {
   try {
     const createCard = await cardServices.createNew(req.body);
 
     res.status(StatusCodes.CREATED).json(createCard);
   } catch (error) {
-    next(error);
+    res.status(500).json({ code: 500, message: err.message });
   }
 };
 
-const updateOrderAndPosition = async (req, res, next) => {
+const updateOrderAndPosition = async (req, res) => {
   try {
     const { boardId, columns } = req.body;
 
     await cardServices.updateOrderAndPosition(boardId, columns);
+
+    res.status(StatusCodes.OK).json();
   } catch (error) {
-    next(error);
+    res.status(500).json({ code: 500, message: err.message });
   }
 };
 
@@ -62,5 +64,5 @@ export const cardControllers = {
   createNew,
   updateOrderAndPosition,
   upadateContent,
-  deleteCard
+  deleteCard,
 };

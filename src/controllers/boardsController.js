@@ -23,7 +23,7 @@ const search = async (req, res) => {
   }
 }
 
-const getOneBoard = async (req, res, next) => {
+const getOneBoard = async (req, res) => {
   try {
     const UserId = req.jwtDecoded.id;
     const BoardId = req.params.id;
@@ -31,7 +31,7 @@ const getOneBoard = async (req, res, next) => {
 
     res.status(StatusCodes.OK).json(board);
   } catch (error) {
-    next(error);
+    res.status(500).json({code: 500, message: error.message})
   }
 };
 
@@ -43,7 +43,7 @@ const createNew = async (req, res) => {
 
     res
       .status(StatusCodes.CREATED)
-      .json({ code: 201, message: "Create board is success" });
+      .json({ code: 201, message: "Create board is success" , board: createBoard});
   } catch (error) {
     res.status(500).json({ code: 500, message: error.message });
   }
