@@ -4,7 +4,10 @@ import { slugtify } from "../utils/formatter.js";
 const getAllBoardByUser = async (UserId) => {
   try {
     return await Board.find({
-      $or: [{ ownerIds: UserId }, { memberIds: UserId }],
+      $and: [
+        { $or: [{ ownerIds: UserId }, { memberIds: UserId }] },
+        { closed: false },
+      ],
     })
       .populate("ownerIds", "username email")
       .populate("memberIds", "username email")
@@ -67,11 +70,7 @@ const createNew = async (reqData, UserId) => {
     };
 
     const model = new Board(data);
-    const newData = await model.save();
-    const newBoard = {
-      newData,
-      slug: slugtify(newData.title),
-    };
+    const newBoard = await model.save();
 
     return newBoard;
   } catch (error) {
@@ -115,6 +114,50 @@ const starred = async (BoardId, starred) => {
   }
 };
 
+const updateVisibility = async (BoardId, visibility) => {
+  try {
+    const newBoard = await Board.findOneAndUpdate(
+      {
+        _id: BoardId,
+      },
+      { $set: { visibility } },
+      { new: true }
+    );
+    return newBoard;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateCover = async (BoardId, cover) => {
+  try {
+    const newBoard = await Board.findOneAndUpdate(
+      {
+        _id: BoardId,
+      },
+      { $set: { cover } },
+      { new: true }
+    );
+    return newBoard;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateStatusBoard = async (BoardId, status) => {
+  try {
+    const newBoard = await Board.findOneAndUpdate(
+      { _id: BoardId },
+      { $set: { closed: status } },
+      { new: true }
+    );
+
+    return newBoard;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const boardServices = {
   createNew,
   getAllBoardByUser,
@@ -122,4 +165,7 @@ export const boardServices = {
   updateReorder,
   starred,
   search,
+  updateVisibility,
+  updateCover,
+  updateStatusBoard
 };

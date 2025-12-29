@@ -15,13 +15,13 @@ const getAllBoard = async (req, res) => {
 const search = async (req, res) => {
   const UserId = req.jwtDecoded.id;
   try {
-    const boards = await boardServices.search(req.query.keyword, UserId)
+    const boards = await boardServices.search(req.query.keyword, UserId);
 
     res.status(StatusCodes.OK).json(boards);
   } catch (error) {
-    res.status(500).json({code: 500, message: error.message})
+    res.status(500).json({ code: 500, message: error.message });
   }
-}
+};
 
 const getOneBoard = async (req, res) => {
   try {
@@ -31,7 +31,7 @@ const getOneBoard = async (req, res) => {
 
     res.status(StatusCodes.OK).json(board);
   } catch (error) {
-    res.status(500).json({code: 500, message: error.message})
+    res.status(500).json({ code: 500, message: error.message });
   }
 };
 
@@ -41,9 +41,11 @@ const createNew = async (req, res) => {
 
     const createBoard = await boardServices.createNew(req.body, UserId);
 
-    res
-      .status(StatusCodes.CREATED)
-      .json({ code: 201, message: "Create board is success" , board: createBoard});
+    res.status(StatusCodes.CREATED).json({
+      code: 201,
+      message: "Create board is success",
+      board: createBoard,
+    });
   } catch (error) {
     res.status(500).json({ code: 500, message: error.message });
   }
@@ -74,7 +76,48 @@ const starred = async (req, res) => {
       req.query.boardId,
       req.query.starred
     );
-    res.status(StatusCodes.CREATED).json({ code: 201, message: "" ,newBoard});
+    res.status(StatusCodes.CREATED).json({ code: 201, message: "", newBoard });
+  } catch (error) {
+    res.status(500).json({ code: 500, message: error.message });
+  }
+};
+
+const updateVisibility = async (req, res) => {
+  const userId = req.jwtDecoded.id;
+  try {
+    const newBoard = await boardServices.updateVisibility(
+      req.query.boardId,
+      req.query.visibility
+    );
+    res.status(StatusCodes.OK).json({ code: 200, message: "", newBoard });
+  } catch (error) {
+    res.status(500).json({ code: 500, message: error.message });
+  }
+};
+
+const updateCover = async (req, res) => {
+  const userId = req.jwtDecoded.id;
+  try {
+    const newBoard = await boardServices.updateCover(
+      req.query.boardId,
+      req.query.cover
+    );
+
+    res.status(StatusCodes.OK).json({ code: 200, message: "", newBoard });
+  } catch (error) {
+    res.status(500).json({ code: 500, message: error.message });
+  }
+};
+
+const updateStatusBoard = async (req, res) => {
+  const userId = req.jwtDecoded.id;
+  try {
+    const newBoard = await boardServices.updateStatusBoard(
+      req.query.boardId,
+      req.query.status
+    );
+
+    res.status(StatusCodes.OK).json({ code: 200, message: "", newBoard });
   } catch (error) {
     res.status(500).json({ code: 500, message: error.message });
   }
@@ -86,5 +129,8 @@ export const boardControllers = {
   getOneBoard,
   updateReorder,
   starred,
-  search
+  search,
+  updateVisibility,
+  updateCover,
+  updateStatusBoard
 };

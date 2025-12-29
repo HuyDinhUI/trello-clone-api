@@ -14,13 +14,15 @@ const boardsSchema = new mongoose.Schema(
     columns: [{ type: Schema.Types.ObjectId, ref: "Columns" }],
     columnsOrder: [{ type: Schema.Types.ObjectId, ref: "Columns" }],
     starred: { type: Boolean, default: false },
+    closed: {type: Boolean, default: false},
+    dateLastView: { type: Date, default: "" },
     _destroy: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
 boardsSchema.index({
-  title: "text"
-})
+  title: "text",
+});
 
 export const Board = mongoose.model("Boards", boardsSchema);

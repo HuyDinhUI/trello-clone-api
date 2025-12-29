@@ -19,4 +19,10 @@ Router.put('/reorderColumn/:id',boardControllers.updateReorder)
 
 Router.put('/starred', boardControllers.starred)
 
+Router.put('/visibility', boardControllers.updateVisibility)
+
+Router.put('/cover',boardControllers.updateCover)
+
+Router.put('/closed', boardControllers.updateStatusBoard)
+
 export const boardsRouter = Router
