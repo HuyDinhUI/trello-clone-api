@@ -123,6 +123,20 @@ const updateStatusBoard = async (req, res) => {
   }
 };
 
+const editLabel = async (req, res) => {
+  const userId = req.jwtDecoded.id;
+  try {
+    const newBoard = await boardServices.editLabel(
+      req.query.boardId,
+      req.query.title
+    );
+
+    res.status(StatusCodes.OK).json({ code: 200, message: "", newBoard });
+  } catch (error) {
+    res.status(500).json({ code: 500, message: error.message });
+  }
+};
+
 export const boardControllers = {
   createNew,
   getAllBoard,
@@ -132,5 +146,6 @@ export const boardControllers = {
   search,
   updateVisibility,
   updateCover,
-  updateStatusBoard
+  updateStatusBoard,
+  editLabel
 };

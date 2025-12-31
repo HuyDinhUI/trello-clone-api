@@ -25,4 +25,6 @@ Router.put('/cover',boardControllers.updateCover)
 
 Router.put('/closed', boardControllers.updateStatusBoard)
 
+Router.put('/label', boardControllers.editLabel)
+
 export const boardsRouter = Router

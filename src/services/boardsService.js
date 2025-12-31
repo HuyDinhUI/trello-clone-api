@@ -158,6 +158,20 @@ const updateStatusBoard = async (BoardId, status) => {
   }
 };
 
+const editLabel = async (boardId, title) => {
+  try {
+    const newBoard = await Board.findOneAndUpdate(
+      { _id: boardId },
+      { $set: { title } },
+      { new: true }
+    );
+
+    return newBoard
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const boardServices = {
   createNew,
   getAllBoardByUser,
@@ -167,5 +181,6 @@ export const boardServices = {
   search,
   updateVisibility,
   updateCover,
-  updateStatusBoard
+  updateStatusBoard,
+  editLabel
 };

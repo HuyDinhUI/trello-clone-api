@@ -13,7 +13,7 @@ const createNew = async (req, res, next) => {
 
 const updateLabel = async (req, res) => {
   try {
-    await columnServices.updateLabel(req.body.title, req.body.columnId);
+    await columnServices.updateLabel(req.body.title, req.body.id);
 
     res.status(StatusCodes.OK).json({
       code: 200,
