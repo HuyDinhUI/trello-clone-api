@@ -29,7 +29,7 @@ const updateOrderAndPosition = async (req, res) => {
     await cardServices.updateOrderAndPosition(boardId, columns);
 
     res.status(StatusCodes.OK).json();
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({ code: 500, message: err.message });
   }
 };
