@@ -79,23 +79,23 @@ const login = async (req, res) => {
 
     //csrf
 
-    // res.cookie("accessToken", accessToken, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "None",
-    //   maxAge: ms("14 days"),
-    //   path: '/'
-    // });
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: ms("14 days"),
+      path: '/'
+    });
 
     // localStoarge
 
-    // res.cookie("refresh", refreshToken, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "None",
-    //   maxAge: ms("14 days"),
-    //   path: '/'
-    // });
+    res.cookie("refresh", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: ms("14 days"),
+      path: '/'
+    });
 
     res.status(StatusCodes.OK).json({
       message:"Log in success",
