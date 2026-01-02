@@ -1,9 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 import { JwtProvider } from "../providers/JwtProvider.js";
-import ms from "ms";
 import { User } from "../modules/users.js";
 import bcrybt from "bcryptjs";
 import 'dotenv/config'
+import ms from "ms";
 
 const ACCESS_TOKEN_SECRET_SIGNATURE = process.env.ACCESS_TOKEN_SECRET_SIGNATURE;
 const REFRESH_TOKEN_SECRET_SIGNATURE = process.env.REFRESH_TOKEN_SECRET_SIGNATURE;
@@ -43,7 +43,7 @@ const login = async (req, res) => {
     return res.status(StatusCodes.TOO_MANY_REQUESTS).json({message: "Detected unauthorized login"})
   }
 
-  const { username, email, password, phone } = req.body;
+  const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -68,7 +68,7 @@ const login = async (req, res) => {
     const accessToken = await JwtProvider.generateToken(
       userInfo,
       ACCESS_TOKEN_SECRET_SIGNATURE,
-      "14 days"
+      "5m"
     );
 
     const refreshToken = await JwtProvider.generateToken(
@@ -77,8 +77,6 @@ const login = async (req, res) => {
       "14 days"
     );
 
-    //csrf
-
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       secure: true,
@@ -86,8 +84,6 @@ const login = async (req, res) => {
       maxAge: ms("14 days"),
       path: '/'
     });
-
-    // localStoarge
 
     res.cookie("refresh", refreshToken, {
       httpOnly: true,
@@ -103,8 +99,9 @@ const login = async (req, res) => {
       accessToken,
       refreshToken,
     });
+
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: error.message});
   }
 };
 

@@ -7,8 +7,6 @@ import {APIs_v1} from './src/routes/v1/index.js'
 import { corsOptions } from "./src/config/corsOptions.js";
 import passport from "passport";
 import "./src/config/auth/passport.js"
-import fs from "fs";
-import https from "https";
 import http from "http"
 
 const app = express();
