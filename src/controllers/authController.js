@@ -2,11 +2,12 @@ import { StatusCodes } from "http-status-codes";
 import { JwtProvider } from "../providers/JwtProvider.js";
 import { User } from "../modules/users.js";
 import bcrybt from "bcryptjs";
-import 'dotenv/config'
+import "dotenv/config";
 import ms from "ms";
 
 const ACCESS_TOKEN_SECRET_SIGNATURE = process.env.ACCESS_TOKEN_SECRET_SIGNATURE;
-const REFRESH_TOKEN_SECRET_SIGNATURE = process.env.REFRESH_TOKEN_SECRET_SIGNATURE;
+const REFRESH_TOKEN_SECRET_SIGNATURE =
+  process.env.REFRESH_TOKEN_SECRET_SIGNATURE;
 
 const signup = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
@@ -31,16 +32,17 @@ const signup = async (req, res) => {
     });
 
     const saved = await newUser.save();
-    res.status(201).json({message: "Sign up success",data:saved});
+    res.status(201).json({ message: "Sign up success", data: saved });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const login = async (req, res) => {
-
-  if (req.alert === 'Rất bất thường') {
-    return res.status(StatusCodes.TOO_MANY_REQUESTS).json({message: "Detected unauthorized login"})
+  if (req.alert === "Rất bất thường") {
+    return res
+      .status(StatusCodes.TOO_MANY_REQUESTS)
+      .json({ message: "Detected unauthorized login" });
   }
 
   const { email, password } = req.body;
@@ -77,31 +79,32 @@ const login = async (req, res) => {
       "14 days"
     );
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: ms("14 days"),
-      path: '/'
-    });
+    // res.cookie("accessToken", accessToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "None",
+    //   maxAge: ms("14 days"),
+    //   path: '/'
+    // });
 
-    res.cookie("refresh", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      maxAge: ms("14 days"),
-      path: '/'
-    });
+    // res.cookie("refresh", refreshToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   sameSite: "None",
+    //   maxAge: ms("14 days"),
+    //   path: '/'
+    // });
 
     res.status(StatusCodes.OK).json({
-      message:"Log in success",
+      message: "Log in success",
       ...userInfo,
       accessToken,
       refreshToken,
     });
-
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message: error.message});
+    res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: error.message });
   }
 };
 
@@ -114,7 +117,7 @@ const logout = async (req, res) => {
     });
     res.clearCookie("refresh", {
       httpOnly: true,
-      secure:true,
+      secure: true,
       sameSite: "None",
     });
     res.status(StatusCodes.OK).json({ message: "Log out success" });
@@ -124,10 +127,40 @@ const logout = async (req, res) => {
 };
 
 const refreshToken = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    res.status(StatusCodes.UNAUTHORIZED).json({ message: "Please Login" });
+  }
+
+  const [type, token] = authHeader.split(" ");
+  if (type !== "Bearer" || !token) {
+    res
+      .status(StatusCodes.EXPECTATION_FAILED)
+      .json({ message: "Header is invalid" });
+    return;
+  }
+
   try {
-    res.status(StatusCodes.OK).json({ message: "Refresh Token API success" });
+    const refreshTokenDecoded = await JwtProvider.verifyToken(
+      token,
+      REFRESH_TOKEN_SECRET_SIGNATURE
+    );
+    const user = {
+      id: refreshTokenDecoded.id,
+      username: refreshTokenDecoded.username,
+      email: refreshTokenDecoded.email,
+      role: refreshTokenDecoded.role
+    }
+
+    const accessToken = await JwtProvider.generateToken(
+      user,
+      ACCESS_TOKEN_SECRET_SIGNATURE,
+      "5m"
+    )
+
+    res.status(StatusCodes.OK).json({ message: "Refresh Token API success" , accessToken});
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error);
+    res.status(StatusCodes.UNAUTHORIZED).json({message: error.message});
   }
 };
 

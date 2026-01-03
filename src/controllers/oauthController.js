@@ -1,26 +1,23 @@
 import jwt from "jsonwebtoken";
-import ms from "ms";
-export const OauthCallback = (req, res) => {
-  const user = req.user;
-  const token = jwt.sign(
-    {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-    },
+import { JwtProvider } from "../providers/JwtProvider.js";
+export const OauthCallback = async (req, res) => {
+  const user = {
+    id: req.user.id,
+    email: req.user.email,
+    username: req.user.username,
+  };
+  const accessToken = await JwtProvider.generateToken(
+    user,
     process.env.ACCESS_TOKEN_SECRET_SIGNATURE,
-    { expiresIn: "1d" }
+    "5m"
   );
 
-  res.cookie("accessToken", token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    maxAge: ms("14 days"),
-  });
+  const refreshToken = await JwtProvider.generateToken(
+    user,
+    process.env.REFRESH_TOKEN_SECRET_SIGNATURE,
+    "14 days"
+  );
 
-  
-  const redirectUrl = `${process.env.FRONTEND_URL}/dashboard/boards`;
+  const redirectUrl = `${process.env.FRONTEND_URL}/auth/callback?accessToken=${accessToken}&refreshToken=${refreshToken}`;
   res.redirect(redirectUrl);
 };
-
